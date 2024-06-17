@@ -48,3 +48,12 @@ supervisorctl status myapp
 ps -elf | grep srk
 ```
 
+# Zabbix
+
+## 连接信息
+
+> 私
+
+## 其他信息
+
+> 所有模板、监控项都可在 `自建监控` 中查看
