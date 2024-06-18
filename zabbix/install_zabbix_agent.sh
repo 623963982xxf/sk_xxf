@@ -58,7 +58,7 @@ init_zab_agent(){
 
   # 下载zabbix_agentd.conf
   mkdir -p /etc/zabbix/zabbix_agentd.d
-  cd /etc/zabbix || echo
+  cd /etc/zabbix || exit
   mv zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null || mv /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null
   curl -sSLo /etc/zabbix/zabbix_agentd.conf "$zab_conf_url"
 
@@ -95,7 +95,7 @@ init_zab_agent(){
   sed -i "s/Name+Ip/$zabbix_agent_name/" /etc/zabbix/zabbix_agentd.conf
 
   # 下载zabbix-custom-shell
-  cd /etc/zabbix/ || exit && wget $zab_custom_shell_url/'zabbix/zab_monitor.sh'
+  cd /etc/zabbix/ || exit && wget $zab_custom_shell_url/'zab_monitor.sh'
   chmod +x /etc/zabbix/*.sh && chmod +x /etc/zabbix/*.py
 
   # 处理脚本和配置文件可能存在的特殊字符
