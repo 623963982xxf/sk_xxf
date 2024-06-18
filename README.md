@@ -57,3 +57,17 @@ ps -elf | grep srk
 ## 其他信息
 
 > 所有模板、监控项都可在 `自建监控` 中查看
+
+## 安装agent
+
+```shell
+# 下载安装脚本
+wget https://raw.githubusercontent.com/623963982xxf/sk_xxf/master/zabbix/install_zabbix_agent.sh
+
+# 执行初始化
+bash install_zabbix_agent.sh 项目名+服务器类型 Agent类型
+
+# 示例
+bash install_zabbix_agent.sh test-nginx pasiv
+```
+
