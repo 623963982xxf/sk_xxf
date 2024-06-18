@@ -22,10 +22,13 @@ get_OsType(){
     if [[ "$ID" == "ubuntu" ]]; then
       export os_installer="apt"
       export pid_prefix="/var/run"
+
     elif [[ "$ID" == "centos" ]]; then
       export os_installer="yum"
       export pid_prefix="/run"
+
     fi
+
   fi
 
 }
