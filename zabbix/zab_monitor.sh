@@ -13,7 +13,7 @@ get_fs_space(){
 }
 
 # 获取cpu 空闲率
-get_cpu_used(){
+get_cpu_idle(){
   cpu_idle=$(sudo vmstat | awk '{print $(NF-2)}' | tail -n 1)
   echo "$cpu_idle"
 }
@@ -54,8 +54,8 @@ case $1 in
   get_rootfs_space)
     get_rootfs_space
   ;;
-  get_cpu_used)
-    get_cpu_used
+  get_cpu_idle)
+    get_cpu_idle
   ;;
   get_mem_used)
     get_mem_used
