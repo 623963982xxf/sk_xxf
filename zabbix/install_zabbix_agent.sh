@@ -58,12 +58,11 @@ init_zab_agent(){
 
   # 下载zabbix_agentd.conf
   mkdir -p /etc/zabbix/zabbix_agentd.d
-  cd /etc/zabbix || exit
-  mv -f zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null || mv -f /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null
+  cd /etc/zabbix && mv -f zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null
   curl -sSLo /etc/zabbix/zabbix_agentd.conf "$zab_conf_url"
 
   # 处理配置文件兼容(centos,ubuntu)
-  ln -s /etc/zabbix/zabbix_agentd.conf /etc/zabbix_agentd.conf
+  mv -f /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null && ln -s /etc/zabbix/zabbix_agentd.conf /etc/zabbix_agentd.conf
   sed -i "s|/var/run|$pid_prefix|" /etc/zabbix/zabbix_agentd.conf
 
   # 拼接zabbix_agent_name
@@ -83,10 +82,10 @@ init_zab_agent(){
 
   # 设置自动注册主机元数据
   case $owner in
-  '*JAVA*'|'*java*')
+  *JAVA*|*java*)
     sed -i "s/srank/java/g" /etc/zabbix/zabbix_agentd.conf
     ;;
-  '*Nginx*'|'*nginx*')
+  *Nginx*|*nginx*)
     sed -i "s/srank/nginx/g" /etc/zabbix/zabbix_agentd.conf
     ;;
   esac
