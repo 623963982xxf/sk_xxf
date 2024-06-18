@@ -25,6 +25,17 @@ get_mem_used(){
   echo "$mem_used"
 }
 
+# 获取端口监听情况
+get_port_status(){
+  port="$1"
+  status=$(netstat -tpunl | awk '{print $4}' | grep -c :"$port"$)
+  if [[ "$status" -gt 0 ]];then
+    echo ok
+  else
+    echo false
+  fi
+}
+
 # 自动发现磁盘的DDL宏原型（用法参考zabbix官方文档）
 fs_discover(){
   fsdisk=$(df -Th | grep -Ei 'ext|xfs' | awk '{print $NF}')
@@ -53,6 +64,9 @@ case $1 in
     fs_discover
   ;;
   get_fs_space)
-    get_fs_space $2
+    get_fs_space "$2"
+  ;;
+  get_port_status)
+    get_port_status "$2"
   ;;
 esac
