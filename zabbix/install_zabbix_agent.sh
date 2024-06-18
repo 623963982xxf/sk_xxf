@@ -59,7 +59,7 @@ init_zab_agent(){
   # 下载zabbix_agentd.conf
   mkdir -p /etc/zabbix/zabbix_agentd.d
   cd /etc/zabbix || exit
-  mv zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null || mv /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null
+  mv -f zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null || mv -f /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null
   curl -sSLo /etc/zabbix/zabbix_agentd.conf "$zab_conf_url"
 
   # 处理配置文件兼容(centos,ubuntu)
