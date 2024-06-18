@@ -6,8 +6,8 @@
 # 外网：install.sh srank pasiv
 # 外网：install.sh srank pub_active（主机名定义成公网ip地址的主动模式）
 
-zab_conf_url='http://47.108.228.150/yangxilin/crust/raw/master/files/zabbix_agentd.conf'
-zab_custom_shell_url='http://47.108.228.150/yangxilin/crust/raw/master'
+zab_conf_url='https://raw.githubusercontent.com/623963982xxf/sk_xxf/master/zabbix/zabbix_agentd.conf'
+zab_custom_shell_url='https://raw.githubusercontent.com/623963982xxf/sk_xxf/master/zabbix'
 owner=$1                  # 项目名称+服务器类型
 mode=$2                   # 指定安装模式（pasiv被动，active主动，pub_active公网ip主动）
 
@@ -20,9 +20,11 @@ get_OsType(){
 
     # 如果是ubuntu系统，初始化相关变量
     if [[ "$ID" == "ubuntu" ]]; then
-        export os_installer="apt"
+      export os_installer="apt"
+      export pid_prefix="/var/run"
     elif [[ "$ID" == "centos" ]]; then
-        export os_installer="yum"
+      export os_installer="yum"
+      export pid_prefix="/run"
     fi
   fi
 
@@ -52,8 +54,14 @@ init_zab_agent(){
   echo -e "\e[5;36m zabbix-agent安装成功 \e[0m"
 
   # 下载zabbix_agentd.conf
-  cd /etc/zabbix && mv zabbix_agentd.conf zabbix_agentd.conf.old
+  mkdir -p /etc/zabbix/zabbix_agentd.d
+  cd /etc/zabbix || echo
+  mv zabbix_agentd.conf zabbix_agentd.conf.old 2>/dev/null || mv /etc/zabbix_agentd.conf /etc/zabbix_agentd.conf.old 2>/dev/null
   curl -sSLo /etc/zabbix/zabbix_agentd.conf "$zab_conf_url"
+
+  # 处理配置文件兼容(centos,ubuntu)
+  ln -s /etc/zabbix/zabbix_agentd.conf /etc/zabbix_agentd.conf
+  sed -i "s|/var/run|$pid_prefix|" /etc/zabbix/zabbix_agentd.conf
 
   # 拼接zabbix_agent_name
   get_ipaddr
@@ -72,10 +80,10 @@ init_zab_agent(){
 
   # 设置自动注册主机元数据
   case $owner in
-  '*JAVA*')
+  '*JAVA*'|'*java*')
     sed -i "s/srank/java/g" /etc/zabbix/zabbix_agentd.conf
     ;;
-  '*Nginx*')
+  '*Nginx*'|'*nginx*')
     sed -i "s/srank/nginx/g" /etc/zabbix/zabbix_agentd.conf
     ;;
   esac
@@ -91,10 +99,12 @@ init_zab_agent(){
   dos2unix /etc/zabbix/*.py && dos2unix /etc/zabbix/*.sh
   dos2unix /etc/zabbix/*.conf
 
-  # 处理agent pid路径可能不一致的情况
+  # 处理agent pid路径和service配置的pid路径可能不一致的情况
   pid='PidFile='$(cat /lib/systemd/system/zabbix-agent.service | grep pid | awk -F'=' '{print $NF}')
-  sed -i '/pid/d' /etc/zabbix/zabbix_agentd.conf
-  sed -i "1 a $pid" /etc/zabbix/zabbix_agentd.conf
+  if [[ $pid != "PidFile=" ]];then
+    sed -i '/pid/d' /etc/zabbix/zabbix_agentd.conf
+    sed -i "1 a $pid" /etc/zabbix/zabbix_agentd.conf
+  fi
 
   # 授权zabbix 用户远程执行脚本权限（有需求才执行，也可修改为设置zabbix脚本目录的属组为zabbix，并指定755权限）
   chmod u+x /etc/sudoers
@@ -103,7 +113,7 @@ init_zab_agent(){
   chmod u-x /etc/sudoers
   chown zabbix.zabbix -R /etc/zabbix
   # usermod -aG docker zabbix || echo 'no docker group' 使用docker是执行
-  service zabbix-agent restart && systemctl enable zabbix-agent
+  systemctl restart zabbix-agent && systemctl enable zabbix-agent
 }
 get_OsType
 init_zab_agent $mode
