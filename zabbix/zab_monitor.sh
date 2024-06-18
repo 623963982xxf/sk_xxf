@@ -28,7 +28,7 @@ get_mem_used(){
 # 获取端口监听情况
 get_port_status(){
   port="$1"
-  status=$(netstat -tpunl | awk '{print $4}' | grep -c :"$port"$)
+  status=$(sudo netstat -tpunl | awk '{print $4}' | grep -c :"$port"$)
   if [[ "$status" -gt 0 ]];then
     echo ok
   else
