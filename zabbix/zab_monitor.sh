@@ -30,9 +30,9 @@ get_port_status(){
   port="$1"
   status=$(netstat -tpunl | awk '{print $4}' | grep -c :"$port"$)
   if [[ "$status" -gt 0 ]];then
-    echo ok
+    echo 1
   else
-    echo false
+    echo 0
   fi
 }
 
@@ -41,9 +41,22 @@ fs_discover(){
   fsdisk=$(df -Th | grep -Ei 'ext|xfs' | awk '{print $NF}')
   echo -e "{\"data\":[\c"
   c=1
-  for fs in $(echo "$fsdisk");do
+  for fs in $fsdisk;do
     echo -e "{\"{#FSDISK}\":\"$fs\"}\c"
     if [[ $c -ne $(echo "$fsdisk" | wc -w) ]];then echo -e ",\c";fi
+    c=$((c+1))
+  done
+  echo -e "]}\c"
+}
+
+# 自动监听nginx, java端口DDL宏原型
+port_discover(){
+  ports=$(netstat -tpnl | awk '/java|nginx/ {print $4}' | awk -F : '{print $NF}')
+  echo -e "{\"data\":[\c"
+  c=1
+  for port in $ports;do
+    echo -e "{\"{#PORT}\":\"$port\"}\c"
+    if [[ $c -ne $(echo "$ports" | wc -w) ]];then echo -e ",\c";fi
     c=$((c+1))
   done
   echo -e "]}\c"
@@ -68,5 +81,8 @@ case $1 in
   ;;
   get_port_status)
     get_port_status "$2"
+  ;;
+  port_discover)
+    port_discover
   ;;
 esac
