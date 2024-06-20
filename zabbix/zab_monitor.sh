@@ -51,7 +51,7 @@ fs_discover(){
 
 # 自动监听nginx, java端口DDL宏原型
 port_discover(){
-  ports=$(netstat -tpnl | awk '/java|nginx/ {print $4}' | awk -F : '{print $NF}')
+  ports=$(netstat -tpnl | awk '/java|nginx/ {print $4}' | awk -F : '{print $NF}' | uniq)
   echo -e "{\"data\":[\c"
   c=1
   for port in $ports;do

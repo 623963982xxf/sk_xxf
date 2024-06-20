@@ -1,3 +1,12 @@
+# 运维管理工具
+
+- Jumpserver
+- Jenkins
+- Zabbix
+- EFK
+
+> 访问信息请查看私有表格
+
 # Supervisord
 
 ## 安装
@@ -70,4 +79,45 @@ bash install_zabbix_agent.sh 项目名+服务器类型 Agent类型
 # 示例
 bash install_zabbix_agent.sh test-nginx pasiv
 ```
+
+# 阿里云
+
+## 产品列表
+
+- RDS云数据库
+- Redis
+- ECS
+- 虚拟局域网-VPC
+- 应用防火墙-WAF
+- 域名
+
+## 产品使用
+
+### RDS
+
+#### 管理
+
+> 直接使用阿里云在线连接管理
+
+#### 常用操作
+
+> - 执行sql
+
+### WAF
+
+#### 管理
+
+> 阿里云在线管理
+
+#### 常用操作
+
+> - 服务器白名单添加
+>   - 打开WAF
+>   - 进入 -> 防护对象
+>   - 搜索对象，如：jenkins
+>   - 查看防护规则
+>   - 找到自定义规则
+>   - 点击编辑
+>   - 点击具体的规则右侧编辑
+>   - 匹配内容 -> 添加IP
 
