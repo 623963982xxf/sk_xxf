@@ -4,6 +4,7 @@
 - Jenkins
 - Zabbix
 - EFK
+- 证书申请系统
 
 > 访问信息请查看私有表格
 
@@ -120,4 +121,19 @@ bash install_zabbix_agent.sh test-nginx pasiv
 >   - 点击编辑
 >   - 点击具体的规则右侧编辑
 >   - 匹配内容 -> 添加IP
+>
+> - 新增防护对象
+>   - 新增接入
+>   - cname方式
 
+# Jenkins
+
+## 站点更新
+
+> 选择带参数更新，根据开发需求，选择环境
+
+## 其他
+
+> p123视图下面包含常规的test环境流程
+>
+> 测试环境的服务器在jms，test分组下
