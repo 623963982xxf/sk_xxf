@@ -134,7 +134,7 @@ bash install_zabbix_agent.sh test-nginx pasiv
 
 ## 站点更新
 
-> 选择带参数更新，根据开发需求，选择环境
+> 进入jks，找到项目，选择带参数更新，根据开发需求，选择环境
 
 ## 其他
 
