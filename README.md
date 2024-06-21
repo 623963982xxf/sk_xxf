@@ -126,6 +126,10 @@ bash install_zabbix_agent.sh test-nginx pasiv
 >   - 新增接入
 >   - cname方式
 
+### 安全组
+
+> 非80,443端口的白名单添加，到对应的服务器安全组操作
+
 # Jenkins
 
 ## 站点更新
