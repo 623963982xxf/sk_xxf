@@ -8,6 +8,38 @@
 
 > 访问信息请查看私有表格
 
+# 产品介绍
+
+## 架构
+
+![image-20240626193344072](C:\Users\Windows\AppData\Roaming\Typora\typora-user-images\image-20240626193344072.png)
+
+## 简介
+
+### jms命名
+
+> 基本规则：项目名+服务类型、服务名+服务类型
+>
+> 如：bb01-java，表示bb01项目，提供java服务的服务器
+>
+> ​    p4-java, 表示提供p4这个服务的java服务器
+
+### 常规环境解释
+
+#### test/demo/bb01:
+
+- `test`：测试环境
+
+- `demo`：demo环境
+
+- `bb01`：公开环境
+
+> **注：该三种环境为基础环境，类似入口，包含基类P1/P2服务，除该3个环境之外，其他环境均不含P1/P2**
+
+#### 其他环境：
+
+> 其他环境包含服务根据 JMS 命名判断
+
 # Supervisord
 
 ## 安装
@@ -66,7 +98,7 @@ ps -elf | grep srk
 
 ## 其他信息
 
-> 所有模板、监控项都可在 `自建监控` 中查看
+> 所有模板、监控项都可在 `模板组` -> `自建监控` 中查看
 
 ## 安装agent
 
@@ -91,6 +123,7 @@ bash install_zabbix_agent.sh test-nginx pasiv
 - 虚拟局域网-VPC
 - 应用防火墙-WAF
 - 域名
+- 资源组
 
 ## 产品使用
 
@@ -130,6 +163,10 @@ bash install_zabbix_agent.sh test-nginx pasiv
 
 > 非80,443端口的白名单添加，到对应的服务器安全组操作
 
+### 一些技巧
+
+> - 带端口的域名未使用WAF，故添加白名单直接通过解析查找对应的服务器，进安全组添加
+
 # Jenkins
 
 ## 站点更新
@@ -141,3 +178,18 @@ bash install_zabbix_agent.sh test-nginx pasiv
 > p123视图下面包含常规的test环境流程
 >
 > 测试环境的服务器在jms，test分组下
+
+# ELK
+
+## 自定义属性解释
+
+> `lb_dealerCode`：环境类型（项目名称），如：test，demo，bb01等
+>
+> `lb_project`：后端服务名称，如：p1,p2,p4,p5,p6等
+
+## 日志源
+
+> 日志源均在 `/applications` 目录下寻找
+>
+> **日志源会被打包，请尽量使用ELK查找日志**
+
